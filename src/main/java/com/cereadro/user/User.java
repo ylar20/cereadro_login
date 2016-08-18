@@ -53,6 +53,7 @@ public class User implements UserDetails {
     @NotNull
     @Setter
     @Getter
+    @JsonIgnore
     private LocalDateTime createdDtime;
 
 	@Transient

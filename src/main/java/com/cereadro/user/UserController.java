@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,9 @@ public class UserController {
 	@Autowired
     UserDao userDao;
 
+    @Autowired
+    UserDetailsService userDetailsService;
+
 	@RequestMapping(value = "/api/users/current", method = RequestMethod.GET)
 	public User getCurrent() {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -25,6 +29,16 @@ public class UserController {
 		}
 		return new User(authentication.getName()); //anonymous user support
 	}
+
+    @RequestMapping(value = "/api/users/register", method = RequestMethod.POST)
+    public ResponseEntity<String> register(@RequestBody final User user) {
+        User existingUser = userDao.findByUsername(user.getUsername());
+        if(existingUser != null) {
+            return new ResponseEntity("User exists", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        userDetailsService.addUser(user.getUsername(), user.getPassword());
+        return new ResponseEntity("registered ok", HttpStatus.OK);
+    }
 
 	@RequestMapping(value = "/api/users/current", method = RequestMethod.PATCH)
 	public ResponseEntity<String> changePassword(@RequestBody final User user) {
