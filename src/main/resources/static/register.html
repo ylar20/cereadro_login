@@ -2,6 +2,28 @@
     There was a problem registering. Please try again.
 </div>
 
+<script src="/js/angular.js"></script>
+<script src="/app/controllers.js"></script>
+<style>
+    .ng-valid {
+        border-bottom: 2px green;
+    }
+    .ng-invalid {
+        border-bottom: 2px red;
+    }
+    .ng-pending {
+        border-bottom: 2px deepskyblue dashed;
+    }
+    .ng-pristine {
+        border-bottom: 2px lime;
+    }
+    .ng-dirty {
+        border-bottom: 2px orange;
+    }
+    .ng-submitted {
+        border-bottom: 2px gray;
+    }
+</style>
 <form role="form" ng-submit="register()">
     <div class="form-group">
         <label for="fn">First name:</label> <input type="text" class="form-control" id="fn" name="firstName" ng-model="firstName"/>

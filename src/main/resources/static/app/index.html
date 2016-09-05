@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app="cereadroApp">
+<head lang="en">
+    <title>BrainText {{username}}</title>
+
+    <!-- --------- --> <!-- AngularJS -->
+    <!-- External  --> <script src="../lib/angularJS/angular.js"></script>
+    <!-- Libraries --> <script src="../lib/angularJS/angular-ngRoute.js"></script>
+    <!--           -->
+    <!--           --> <!-- JQuery -->
+    <!--           --> <script src="../lib/jQuery/jquery-3.1.0.js"></script>
+    <!--           -->
+    <!--           --> <!-- Bootstrap (requires JQuery) -->
+    <!--           --> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--           --> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--           --> <!-- Optional theme -->
+    <!--           --> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!--           -->
+    <!--           --> <!-- Material design (requires Bootstrap) -->
+    <!--           --> <link rel="stylesheet" href="/lib/bootstrap-material-design/css/bootstrap-material-design.min.css">
+    <!--           --> <link rel="stylesheet" href="/lib/bootstrap-material-design/css/ripples.min.css">
+    <!--           --> <script src="../lib/bootstrap-material-design/js/material.min.js"></script>
+    <!--           --> <script src="../lib/bootstrap-material-design/js/ripples.min.js"></script>
+    <!--           --> <!-- Material design fonts -->
+    <!--           --> <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <!--           --> <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!--           -->
+    <!--           --> <!-- <!-- Materialize (Material design) -->
+    <!--           --> <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <!--           --> <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <!--           -->
+    <!-- --------- -->
+
+    <!-- Custom scripts and configuration -->
+    <script src="/js/myAngularThings.js"></script>
+    <script src="/app/home/home.js"></script>
+    <script src="/app/controllers.js"></script>
+    <style>
+        aside, nav {
+            padding: 0 !important;
+        }
+        aside > header {
+            padding: 16px;
+        }
+        nav {
+            height: auto !important; /* Override materialize's assumption that this is a top navbar */
+        }
+        aside > nav > a {
+            display: block !important;
+            text-align: left !important;
+            color: black;
+        }
+        aside > nav > a.active {
+            background-color: darkgray;
+        }
+        main {
+            padding:8px;
+        }
+    </style>
+</head>
+<body ng-init="init()">
+    <div id="page" class="container">
+        <aside class="col-md-3" style="background-color: lightgray;">
+            <header>
+                <h1>Braintext</h1>
+                <h3 style="color:red;">username</h3>
+            </header>
+            <nav>
+                <a href="#" class="btn text-uppercase active">Home</a>
+                <a href="#" class="btn text-uppercase ">Archive</a>
+                <a href="#" class="btn text-uppercase ">Tags</a>
+                <a href="#" class="btn text-uppercase ">Source files</a>
+            </nav>
+            <span>more content</span>
+        </aside>
+
+        <div id="main" class="col-md-9">
+            <main ng-view class="bg-info">
+
+                <!-- ngRoute puts the page content here -->
+            </main>
+        </div>
+        <!--
+        <div ng-hide="authenticated">
+            Login as user/user or admin/admin:<br>
+            <label for="un">Username:</label><input id="un" type="text" ng-model="username"><br>
+            <label for="pw">Password:</label><input id="pw" type="password" ng-model="password"><br>
+            <button ng-click="login()">Login</button>
+        </div>
+        <div ng-show="authenticated">
+            Logged in as {{username}} <button ng-click="logout()">Logout</button><br><br>
+            Token content: <pre>{{token | json}}</pre>
+        </div>
+        -->
+    </div>
+</body>
+</html>
