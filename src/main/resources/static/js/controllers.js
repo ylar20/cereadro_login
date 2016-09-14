@@ -2,7 +2,7 @@ var app = angular.module('cereadroApp', ['ngRoute'])
     .config(function($routeProvider, $httpProvider) {
         $routeProvider.when('/', {
             templateUrl : 'home.html',
-            controller : 'home'
+            controller : 'navigation'
         }).when('/login', {
             templateUrl : 'login.html',
             controller : 'navigation'
@@ -47,6 +47,7 @@ var app = angular.module('cereadroApp', ['ngRoute'])
 app.controller('navigation', function ($scope, $http, TokenStorage) {
 	$scope.authenticated = false;
 	$scope.token;
+    $scope.registered = false;
 	
 	$scope.init = function () {
 		$http.get('/api/users/current').success(function (user) {
@@ -54,6 +55,10 @@ app.controller('navigation', function ($scope, $http, TokenStorage) {
 				$scope.authenticated = true;
 				$scope.username = user.username;
 				$scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
+                /*var rootEle = document.querySelector("html");
+                var ele = angular.element(rootEle);
+                var scope = ele.scope();
+                debugger;*/
 			}
 		});
 	};
@@ -67,10 +72,27 @@ app.controller('navigation', function ($scope, $http, TokenStorage) {
 			    $scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
 		    })
             .error(function() {
-                $rootScope.authenticated = false;
+                $scope.authenticated = false;
                 $scope.error = true;
             });
 	};
+
+    $scope.register = function () {
+        $http
+            .post('/api/users/register', {username: $scope.username, password:$scope.password,
+                email:$scope.email, firstname:$scope.firstname, lastname:$scope.lastname})
+        .success(function () {
+            $scope.registered = true;
+            debugger;
+        })
+        .error(function(result, status) {
+            $scope.registered = false;
+            $scope.error = true;
+            $scope.errorMsg = { message: result, status: status};
+            console.log($scope.errorMsg);
+            debugger;
+        });
+    };
 
 	$scope.logout = function () {
 		TokenStorage.clear();	

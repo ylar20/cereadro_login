@@ -26,12 +26,15 @@ public class UserDetailsService implements org.springframework.security.core.use
 		return user;
 	}
 
-    public void addUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.grantRole(username.equals("admin") ? UserRole.ADMIN : UserRole.USER);
-        user.setCreatedDtime(LocalDateTime.now());
-        userDao.save(user);
+    public void addUser(User user) {
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        newUser.setEmail(user.getEmail());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.grantRole(UserRole.USER);
+        newUser.setCreatedDtime(LocalDateTime.now());
+        userDao.save(newUser);
     }
 }

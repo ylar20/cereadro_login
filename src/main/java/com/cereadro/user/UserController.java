@@ -36,7 +36,7 @@ public class UserController {
         if(existingUser != null) {
             return new ResponseEntity("User exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        userDetailsService.addUser(user.getUsername(), user.getPassword());
+        userDetailsService.addUser(user);
         return new ResponseEntity("registered ok", HttpStatus.OK);
     }
 

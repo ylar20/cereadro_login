@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -47,8 +48,25 @@ public class User implements UserDetails {
 	@NotNull
 	@Size(min = 4, max = 100)
     @Setter
-    @Getter
 	private String password;
+
+    @Getter
+    @Setter
+    @Email
+    @Size(min = 5, max = 50)
+    private String email;
+
+    @Getter
+    @Setter
+    @NotNull
+    @Size(min = 5, max = 50)
+    private String lastName;
+
+    @Getter
+    @Setter
+    @NotNull
+    @Size(min = 5, max = 50)
+    private String firstName;
 
     @NotNull
     @Setter
@@ -84,6 +102,7 @@ public class User implements UserDetails {
 	@Transient
     @Setter
     @Getter
+    @JsonIgnore
 	private String newPassword;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
@@ -103,16 +122,6 @@ public class User implements UserDetails {
 	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@JsonIgnore
-	public String getNewPassword() {
-		return newPassword;
-	}
-
-	@JsonProperty
-	public void setNewPassword(String newPassword) {
-		this.newPassword = newPassword;
 	}
 
 	@Override

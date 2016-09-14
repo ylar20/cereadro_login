@@ -2,7 +2,7 @@
     There was a problem registering. Please try again.
 </div>
 
-<form role="form" ng-submit="register()">
+<form role="form" ng-controller="navigation" ng-hide="registered" ng-submit="register()">
     <div class="form-group">
         <label for="fn">First name:</label> <input type="text" class="form-control" id="fn" name="firstName" ng-model="firstName"/>
     </div>
@@ -20,14 +20,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
-<!--
-<div ng-hide="authenticated" class="form-group">
-    Login:<br>
-    <label for="un">Username:</label><input id="un" class="form-control" type="text" ng-model="username"><br>
-    <label for="pw">Password:</label><input id="pw" class="form-control" type="password" ng-model="password"><br>
-    <button class="btn btn-primary" ng-click="login()">Login</button>
+<div ng-controller="navigation" ng-show="registered">
+    Successfully registered!
 </div>
-<div ng-show="authenticated">
-    Logged in as {{username}} <button ng-click="logout()">Logout</button><br><br>
-    Token content: <pre>{{token | json}}</pre>
-</div>-->
