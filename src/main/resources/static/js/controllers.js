@@ -1,48 +1,52 @@
-var app = angular.module('cereadroApp', ['ngRoute'])
-    .config(function($routeProvider, $httpProvider) {
+var app;
+app = angular.module('cereadroApp', ['ngRoute'])
+    .config(function ($routeProvider, $httpProvider) {
         $routeProvider.when('/', {
-            templateUrl : 'home.html',
-            controller : 'navigation'
+            templateUrl: 'home.html',
+            controller: 'navigation'
         }).when('/login', {
-            templateUrl : 'login.html',
-            controller : 'navigation'
+            templateUrl: 'login.html',
+            controller: 'navigation'
         }).when('/register', {
-            templateUrl : 'register.html',
-            controller : 'navigation'
+            templateUrl: 'register.html',
+            controller: 'navigation'
+        }).when('/upload', {
+            templateUrl: 'upload.html',
+            controller: 'navigation'
         }).otherwise('/');
 
         $httpProvider.interceptors.push('TokenAuthInterceptor');
-    }).factory('TokenStorage', function() {
+    }).factory('TokenStorage', function () {
 
         var storageKey = 'auth_token';
-	return {		
-		store : function(token) {
-			return localStorage.setItem(storageKey, token);
-		},
-		retrieve : function() {
-			return localStorage.getItem(storageKey);
-		},
-		clear : function() {
-			return localStorage.removeItem(storageKey);
-		}
-	};
-}).factory('TokenAuthInterceptor', function($q, TokenStorage) {
-	return {
-		request: function(config) {
-			var authToken = TokenStorage.retrieve();
-			if (authToken) {
-				config.headers['X-AUTH-TOKEN'] = authToken;
-			}
-			return config;
-		},
-		responseError: function(error) {
-			if (error.status === 401 || error.status === 403) {
-				TokenStorage.clear();
-			}
-			return $q.reject(error);
-		}
-	};
-});
+        return {
+            store: function (token) {
+                return localStorage.setItem(storageKey, token);
+            },
+            retrieve: function () {
+                return localStorage.getItem(storageKey);
+            },
+            clear: function () {
+                return localStorage.removeItem(storageKey);
+            }
+        };
+    }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
+        return {
+            request: function (config) {
+                var authToken = TokenStorage.retrieve();
+                if (authToken) {
+                    config.headers['X-AUTH-TOKEN'] = authToken;
+                }
+                return config;
+            },
+            responseError: function (error) {
+                if (error.status === 401 || error.status === 403) {
+                    TokenStorage.clear();
+                }
+                return $q.reject(error);
+            }
+        };
+    });
 
 app.controller('navigation', function ($scope, $http, TokenStorage) {
 	$scope.authenticated = false;

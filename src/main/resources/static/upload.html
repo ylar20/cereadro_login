@@ -1,0 +1,9 @@
+<div class="alert alert-danger" ng-show="error">
+    There was a problem uploading your file. Please try again.
+</div>
+
+<div ng-controller="navigation" ng-show="authenticated" class="form-group">
+    Upload your file:<br>
+    <label for="file">Select file:</label><input id="file" class="glyphicon-file" type="file" ng-model="file"><br>
+    <button class="btn btn-primary" ng-click="upload()">Upload</button>
+</div>
