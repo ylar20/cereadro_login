@@ -1,0 +1,10 @@
+<div class="alert alert-danger" ng-show="error">
+    There was a problem logging in. Please try again.
+</div>
+
+<div ng-controller="navigation" ng-hide="authenticated" class="form-group">
+    Login:<br>
+    <label for="un">Username:</label><input id="un" class="form-control" type="text" ng-model="username"><br>
+    <label for="pw">Password:</label><input id="pw" class="form-control" type="password" ng-model="password"><br>
+    <button class="btn btn-primary" ng-click="login()">Login</button>
+</div>

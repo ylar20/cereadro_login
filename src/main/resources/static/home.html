@@ -1,0 +1,8 @@
+<h1>Greeting</h1>
+<div ng-controller="navigation" ng-hide="authenticated">
+    <p>Login to see your greeting</p>
+</div>
+<div ng-controller="navigation" ng-show="authenticated">
+    Logged in as {{username}}
+    Token content: <pre>{{token | json}}</pre>
+</div>
