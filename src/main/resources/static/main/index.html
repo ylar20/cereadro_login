@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html ng-app="cereadroApp">
+<head lang="en">
+    <title>BrainText - Your digital memory</title>
+
+    <meta charset="utf-8">
+<!-- --------- --> <!-- AngularJS -->
+<!-- External  -->
+<!-- Libraries --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js" integrity="sha384-W+8KFoIQDsXqraRc1gurjtChMnSl9JM8TZYiKO9EDDO7lPQD+Nnyn7HslcMvGiA8" crossorigin="anonymous"></script>
+<!--           --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js" integrity="sha384-aWch3fyn68hBAGiZXDSUT+12kG1w8xPcoRPPFgup24nwh70gvU7/GFi1oyTiW9XM" crossorigin="anonymous"></script>
+<!--           --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.js" integrity="sha384-k1co4YnVVBWZkP5e+sx0MIPNtsttQKhu5RDzM/C1hhwRlCOfEZVWhnvWf42f7vl2" crossorigin="anonymous"></script>
+<!--           --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js" integrity="sha384-9TyMDnNIkazPVCUh6noESKgtlgDEhFzzQUalklsy7ceuaaGBXThz4TRlrOs/AlZs" crossorigin="anonymous"></script>
+<!--           --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js" integrity="sha384-QwHlVs3pUZ0GUfydVCMMZQPhI0z+QK/kC1tbEcAO0WHLeMQuMGzLv4nhFA+Vsp1V" crossorigin="anonymous"></script>
+<!--           -->
+<!--           --> <!-- JQuery -->
+<!--           --> <script src="http://code.jquery.com/jquery-3.1.0.js" integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk=" crossorigin="anonymous"></script>
+<!--           -->
+<!--           --> <!-- Bootstrap (requires JQuery) -->
+<!--           --> <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!--           --> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--           --> <!-- Optional theme -->
+<!--           --> <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!--           -->
+<!--           --> <!-- Material design (requires Bootstrap) -->
+<!--           --> <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css" integrity="sha256-c9OCpXgYepI8baar2x81YigAWryLIoQ2k0/7cCb1JAg=" crossorigin="anonymous" />
+<!--           --> <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.js" integrity="sha256-9ZC6YaEpPQKe5ejc7kvlwjoKWFpG/NGPnFyqHtB+UnY=" crossorigin="anonymous"></script>
+<!--           --> <!-- Material design fonts -->
+<!--           --> <!-- WARNING: If these fonts are not loaded, md-tabs will not display properly -->
+<!--           --> <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<!--           --> <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+<!--           -->
+<!--           -->
+<!--           -->  <!-- Angular material (Requires Angular (base, -animate, -aria, -messages), sometimes requires ngRoute) -->
+<!--           --> <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css" integrity="sha384-GpogX0bcLyjavkmmdcLs+ZRUPXKVtE9KB4ZtaluJCc/HdAH2dBsBDx3uykgzhPFl" crossorigin="anonymous">
+<!--           --> <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js" integrity="sha384-HQxGqBeUYrKXtcZ/rQXqlv9m35Uowtk6Q1qPv6+NWZKHE8ZBed1EluIYzjzu92pB" crossorigin="anonymous"></script>
+<!--           -->
+<!-- --------- -->
+
+    <!-- Custom scripts and configuration -->
+    <script src="/main/controllers.js"></script>
+    <link rel="stylesheet/less" href="/main/style.less">
+    <!-- LESS css preprocessor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+</head>
+<body ng-init="init()" ng-controller="mainCtrl">
+<div id="page">
+    <header id=header>
+        <div id="login">
+            <md-button ng-if="authenticated" class="md-raised" ng-click="logOut(e);">
+                Log out ({{user.username}})
+            </md-button>
+            <md-button ng-if="!authenticated" class="md-raised" ng-click="showLoginDialog(e);">
+                Log in
+            </md-button>
+        </div>
+        <div id="title">
+            <h1>BrainText</h1>
+            <p>Organise your mind</p>
+        </div>
+        <div id="signup">
+            <md-button class="md-raised" md-whiteframe="12" ng-click="showSignupDialog(e);">Sign up</md-button>
+        </div>
+    </header>
+
+    <section id="features">
+        <div class="feature">
+            <img src="https://media.ibroadcast.com/svg/icon-addmusic.svg" alt="" class="icon">
+            <div class="text">Upload a file.</div>
+        </div>
+        <div class="feature">
+            <img src="https://media.ibroadcast.com/svg/icon-addmusic.svg" alt="" class="icon">
+            <div class="text">Click on phrases to highlight.</div>
+        </div>
+        <div class="feature">
+            <img src="https://media.ibroadcast.com/svg/icon-addmusic.svg" alt="" class="icon">
+            <div class="text">Read those phrases in an archive</div>
+        </div>
+        <div class="feature">
+            <img src="https://media.ibroadcast.com/svg/icon-addmusic.svg" alt="" class="icon">
+            <div class="text">Send your archive to another user.</div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

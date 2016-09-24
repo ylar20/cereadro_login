@@ -1,0 +1,107 @@
+
+@main-color: #f35d5d;
+@main-color-lighter: @main-color + #111;
+
+.space_reserving_hidden {
+    visibility: hidden;
+}
+md-dialog {
+    min-width: 640px;
+}
+
+#login > button {
+    background-color: transparent;
+    border: 2px solid @main-color;
+}
+#login > button:hover {
+    background-color: @main-color-lighter;
+}
+#signup > button {
+    color: white;
+    background-color: @main-color;
+}
+#signup > button:hover {
+    background-color: @main-color-lighter;
+}
+body {
+    background-size: cover;
+    background-position-y: -20px;
+    background-image: url("http://img10.deviantart.net/2d0d/i/2006/363/1/1/torn_and_folded_paper_by_nasrian.jpg");
+}
+
+
+#page {
+    width: 100%;
+}
+#header {
+    display: flex;
+    height: 420px;
+    flex-direction: column;
+    align-items: stretch; /* make children 100% wide */
+    justify-content: space-between;
+
+    #login {
+        display:flex;
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        flex-grow: 1;
+        padding: 16px;
+
+        button {
+            margin-left: auto;
+        }
+    }
+
+    #title {
+        display: flex;
+        flex-direction:column;
+        align-items: center;
+        line-height: 1;
+
+        h1 {
+            margin: 0;
+            font-size: 6em;
+        }
+        p {
+            font-size: 2em;
+        }
+    }
+
+    #signup {
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            padding-left: 96px;
+            padding-right: 96px;
+        }
+    }
+}
+
+
+#features {
+    background-color: @main-color;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    .feature {
+        margin: 48px;
+        display: flex;
+        flex-direction: column;
+        width: 128px;
+
+        img {
+            height: 96px;
+            margin: 8px;
+        }
+
+        .text {
+            font-size: 1.4em;
+            text-align: center;
+        }
+    }
+}

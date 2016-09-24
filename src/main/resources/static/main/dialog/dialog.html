@@ -1,0 +1,185 @@
+<md-dialog aria-label="List dialog">
+    <md-tabs md-dynamic-height md-border-bottom md-selected="selected">
+        <md-tab label="Log in">
+            <md-content class="md-padding">
+                <h2>Log in </h2>
+                <md-progress-linear ng-show="logging_in" md-mode="indeterminate"></md-progress-linear>
+                <p class="text-danger" ng-show="loginError">Failed to log in, invalid credentials</p>
+                <hr>
+                <form ng-submit="login()" name="loginForm">
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_username'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_password'"></ng-include>
+                    </md-input-container>
+
+                    <md-button ng-disabled="loginForm.$invalid || logging_in" type="submit" class="md-raised md-primary">Log in</md-button>
+                </form>
+            </md-content>
+        </md-tab>
+
+        <md-tab label="Register">
+            <md-content class="md-padding">
+                <h2>Register</h2>
+                <md-progress-linear ng-show="registering" md-mode="indeterminate"></md-progress-linear>
+                <p class="text-danger" ng-show="registerError">Registration failed, {{registerError}}</p>
+                <hr>
+                <form ng-submit="register()" name="registerForm">
+                    <md-input-container>
+                        <ng-include src="'field_first_name'"></ng-include>
+                    </md-input-container>
+                    <md-input-container>
+                        <ng-include src="'field_last_name'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_email'"></ng-include>
+                    </md-input-container>
+                    <br>
+                    <br>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_username'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_password'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_password_repeat'"></ng-include>
+                    </md-input-container>
+                    <md-button ng-disabled="registerForm.$invalid || registering" type=submit class="md-raised md-primary">Register</md-button>
+                </form>
+            </md-content>
+        </md-tab>
+
+    </md-tabs>
+</md-dialog>
+
+
+
+<script type='text/ng-template' id="field_username">
+    <label>Username:</label>
+    <input aria-label="username"
+           name="username"
+           type="text"
+           ng-model="user.username"
+           ng-minlength="4"
+           ng-maxlength="50"
+           ng-model-options="{ allowInvalid: true }"
+           required>
+    <div ng-messages="registerForm.username.$error">
+        <div ng-message="minlength">
+            The username must be at least 4 characters long
+        </div>
+        <div ng-message="maxlength">
+            The username must be no more than 50 characters long
+        </div>
+        <div ng-message="required">
+            Please enter a username
+        </div>
+        <div ng-message="unique">
+            This username is already taken
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_password">
+    <label>Password:</label>
+    <input aria-label="password"
+           name="password"
+           type="password"
+           ng-minlength="4"
+           ng-maxlength="50"
+           ng-model="user.password"
+           ng-model-options="{ allowInvalid: true }"
+           required>
+    <div ng-messages="registerForm.password.$error" ng-messages-multiple>
+        <div ng-message="minlength">
+            The password must be at least 4 characters long
+        </div>
+        <div ng-message="maxlength">
+            The password must be no more than 50 characters long
+        </div>
+        <div ng-message="required">
+            Please enter a password
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_password_repeat">
+    <label>Password repeat:</label>
+    <input aria-label="password repeat"
+           name="password_repeat"
+           type="password"
+           ng-model="password_repeat"
+           ng-equals="user.password"
+           required>
+    <div ng-messages="registerForm.password_repeat.$error" ng-messages-multiple>
+        <div ng-message="required">
+            Please repeat your password to ensure there weren't typos
+        </div>
+        <div ng-message="equality">
+            Passwords do not match
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_first_name">
+    <label>First name:</label>
+    <input aria-label="first_name"
+           name="first_name"
+           type="text"
+           ng-minlength="5"
+           ng-maxlength="50"
+           ng-model="user.first_name"
+           required>
+    <div ng-messages="registerForm.first_name.$error" ng-messages-multiple>
+        <div ng-message="minlength">
+            Your first name must be at least 5 characters long
+        </div>
+        <div ng-message="maxlength">
+            Your first name must be no more than 50 characters long
+        </div>
+        <div ng-message="required">
+            Please enter your first name
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_last_name">
+    <label>Last name:</label>
+    <input aria-label="last_name"
+           name="last_name"
+           type="text"
+           ng-minlength="5"
+           ng-maxlength="50"
+           ng-model="user.last_name"
+           required>
+    <div ng-messages="registerForm.last_name.$error" ng-messages-multiple>
+        <div ng-message="minlength">
+            Your last name must be at least 5 characters long
+        </div>
+        <div ng-message="maxlength">
+            Your last name must be no more than 50 characters long
+        </div>
+        <div ng-message="required">
+            Please enter your last name
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_email">
+    <label>E-mail address:</label>
+    <input aria-label="email"
+           name="email"
+           type="email"
+           ng-minlength="5"
+           ng-maxlength="50"
+           ng-model="user.email"
+           required>
+    <div ng-messages="registerForm.email.$error" ng-messages-multiple>
+        <div ng-message="minlength"> Your email address must be at least 5 characters long</div>
+        <div ng-message="maxlength"> Your email address must be no more than 50 characters long</div>
+        <div ng-message="required"> Please enter your email</div>
+        <div ng-message="email"> Please enter a valid email address</div>
+    </div>
+</script>
