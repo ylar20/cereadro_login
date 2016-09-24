@@ -27,6 +27,15 @@
                 <hr>
                 <form ng-submit="register()" name="registerForm">
                     <md-input-container class="md-block">
+                        <ng-include src="'field_first_name'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_last_name'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <ng-include src="'field_email'"></ng-include>
+                    </md-input-container>
+                    <md-input-container class="md-block">
                         <ng-include src="'field_username'"></ng-include>
                     </md-input-container>
                     <md-input-container class="md-block">
@@ -51,15 +60,18 @@
            name="username"
            type="text"
            ng-model="user.username"
-           ng-pattern="/^[a-z1-9]{4,12}$/"
+           ng-pattern="/^[a-z1-9]{4,50}$/"
            ng-model-options="{ allowInvalid: true }"
            required>
-    <div ng-messages="loginForm.username.$error">
+    <div ng-messages="registerForm.username.$error">
         <div ng-message="required">
             Please enter a username
         </div>
         <div ng-message="pattern">
             Alphanumeric only and 4-12 chars please
+        </div>
+        <div ng-message="unique">
+            This username is already taken
         </div>
     </div>
 </script>
@@ -69,11 +81,12 @@
     <input aria-label="password"
            name="password"
            type="password"
+           ng-minlength="4"
+           ng-maxlength="50"
            ng-model="user.password"
-           ng-pattern="/^.{4,}$/"
            ng-model-options="{ allowInvalid: true }"
            required>
-    <div ng-messages="loginForm.password.$error">
+    <div ng-messages="registerForm.password.$error">
         <div ng-message="required">
             Please enter a password
         </div>
@@ -97,6 +110,54 @@
         </div>
         <div ng-message="equality">
             Passwords do not match
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_first_name">
+    <label>First name:</label>
+    <input aria-label="first_name"
+           name="first_name"
+           type="text"
+           ng-minlength="5"
+           ng-model="user.first_name"
+           required>
+    <div ng-messages="registerForm.first_name.$error">
+        <div ng-message="required">
+            Please enter your first name
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_last_name">
+    <label>Last name:</label>
+    <input aria-label="last_name"
+           name="last_name"
+           type="text"
+           ng-minlength="5"
+           ng-model="user.last_name"
+           required>
+    <div ng-messages="registerForm.last_name.$error">
+        <div ng-message="required">
+            Please enter your last name
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="field_email">
+    <label>E-mail address:</label>
+    <input aria-label="email"
+           name="email"
+           type="email"
+           ng-minlength="5"
+           ng-model="user.email"
+           required>
+    <div ng-messages="registerForm.email.$error">
+        <div ng-message="required">
+            Please enter your email
+        </div>
+        <div ng-message="email">
+            Please enter a valid email address
         </div>
     </div>
 </script>

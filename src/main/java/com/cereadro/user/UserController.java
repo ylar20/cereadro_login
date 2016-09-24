@@ -30,14 +30,14 @@ public class UserController {
 		return new User(authentication.getName()); //anonymous user support
 	}
 
-    @RequestMapping(value = "/api/users/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/users/register", method = RequestMethod.POST, produces="text/plain; charset=utf-8")
     public ResponseEntity<String> register(@RequestBody final User user) {
         User existingUser = userDao.findByUsername(user.getUsername());
         if(existingUser != null) {
-            return new ResponseEntity("User exists", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>("User exists", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        userDetailsService.addUser(user.getUsername(), user.getPassword());
-        return new ResponseEntity("registered ok", HttpStatus.OK);
+        userDetailsService.addUser(user);
+        return new ResponseEntity<>("registered ok", HttpStatus.OK);
     }
 
 	@RequestMapping(value = "/api/users/current", method = RequestMethod.PATCH)

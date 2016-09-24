@@ -1,3 +1,6 @@
+const EXISTING_USER_ERROR = new Error("A user with this name already exists");
+
+
 var app = angular.module('cereadroApp', ['ngRoute','ngMaterial','ngMessages'])
     .factory('TokenStorage', tokenStorage)
     .factory('TokenAuthInterceptor', tokenAuthInterceptor)
@@ -76,7 +79,7 @@ var app = angular.module('cereadroApp', ['ngRoute','ngMaterial','ngMessages'])
 
 function dialogController(index) {
     return function($scope, $http, $mdDialog, TokenStorage, LoginService){
-        $scope.user = {username:"", password:""};
+        $scope.user = {username:"", password:"", first_name:"", last_name:"", email:""};
         $scope.password_repeat = "";
         $scope.logging_in = false;
         $scope.loginError = false;
@@ -93,14 +96,33 @@ function dialogController(index) {
                     $mdDialog.hide(token); // Dialog (promise) returns token
                 })
                 .catch(function(error){
-                    $scope.loginError = true;
+                    $scope.loginError = error;
                 })
                 .then(function(){
                     $scope.logging_in = false;
                 })
         };
         $scope.register = function(){
-
+            $scope.registering = true;
+            $scope.registerError = false;
+            LoginService.register($scope.user)
+                .then(function(token){
+                    TokenStorage.store(token);
+                    $mdDialog.hide(token);
+                })
+                .catch(function(error){
+                    $scope.registerError = error.message;
+                    var takenusername = $scope.user.username;
+                    if(error == EXISTING_USER_ERROR){
+                        $scope.registerForm.username.$setValidity('unique',false);
+                        $scope.$watch('user.username',function(){
+                            $scope.registerForm.username.$setValidity('unique',$scope.user.username != takenusername);
+                        })
+                    }
+                })
+                .then(function(){
+                    $scope.registering = false;
+                })
         };
         $scope.selected = index;
         $scope.closeDialog = $mdDialog.cancel;
@@ -128,6 +150,7 @@ function tokenStorage() {
         }
     };
 }
+
 function tokenAuthInterceptor($q, TokenStorage) {
     return {
         request: function(config) {
@@ -145,8 +168,9 @@ function tokenAuthInterceptor($q, TokenStorage) {
         }
     };
 }
+
 function loginService($http) {
-    return {
+    var service = {
         getCurrentUser: function(){
             return $http.get('/api/users/current')
                 .then(function (response) {
@@ -161,7 +185,25 @@ function loginService($http) {
                 .post('/api/login', { username: user.username, password: user.password })
                 .then(function (result) {
                     return result.headers('X-AUTH-TOKEN');
+                }, function(error){
+                    throw new Error("Failed to log in", error);
+                });
+        },
+
+        register: function(user){
+            return $http
+                .post('/api/users/register', {username: user.username, password:user.password,
+                    email:user.email, firstName:user.first_name, lastName:user.last_name})
+                .then(function (response) {
+                    return service.login(user);
+                }, function(response){
+                    if(response.status == 422){
+                        throw EXISTING_USER_ERROR;
+                    } else {
+                        throw new Error("Registration error: ", response);
+                    }
                 });
         }
     }
+    return service;
 }
