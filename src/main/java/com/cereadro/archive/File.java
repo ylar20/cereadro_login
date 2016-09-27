@@ -1,4 +1,4 @@
-package com.cereadro.upload;
+package com.cereadro.archive;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,11 @@ public class File {
     @Getter
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NotNull
+    @Getter
+    @Setter
+    private Long userId;
 
     @NotNull
     @Size(min = 4, max = 50)
