@@ -2,13 +2,6 @@
     There was a problem uploading your file. Please try again.
 </div>
 
-<!--<div ng-controller="uploadCtrl" class="form-group">
-    Upload your file:<br>
-    <label for="file">Select file:</label>
-    <input id="file" class="form-control" type="file" file-model="upFile"><br>
-    <button class="btn btn-primary" ng-click="">Upload</button>
-</div>-->
-
 <div id="main" ng-controller="ArchiveCtrl" class="form-group">
     <h2>Documents</h2>
     <table class="table">
@@ -31,9 +24,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="metadata in metadataList">
-            <td><a href="/archive/document/{{metadata.uuid}}">{{metadata.fileName}}</a></td>
-            <td><a href="/archive/document/{{metadata.uuid}}">{{metadata.personName}}</a></td>
-            <td><a href="/archive/document/{{metadata.uuid}}">{{metadata.documentDate | date:'yyyy-MM-dd'}}</a></td>
+            <td><a href="/archive/document/{{metadata.id}}">{{metadata.fileName}}</a></td>
+            <td><a href="/archive/document/{{metadata.id}}">{{metadata.createdDtime | date:'yyyy-MM-dd'}}</a></td>
         </tr>
         </tbody>
     </table>
@@ -41,18 +33,6 @@
 <div id="sidebar" ng-controller="UploadCtrl" class="form-group">
     <h2>Upload</h2>
     <table class="table">
-        <tr>
-            <td>Name</td>
-        </tr>
-        <tr>
-            <td><input type="text" class="form-control" ng-model="name"></td>
-        </tr>
-        <tr>
-            <td>Date</td>
-        </tr>
-        <tr>
-            <td><input type="text" class="form-control" ng-model="date"></td>
-        </tr>
         <tr>
             <td><input type="file" class="form-control" file-model="myFile"></td>
 

@@ -1,4 +1,4 @@
-package com.cereadro.archive;
+package com.cereadro.archive.service;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,9 +33,11 @@ public class File {
     private String fileName;
 
     @NotNull
+    @Lob
+    @Column(length=100000)
     @Setter
     @Getter
-    private Byte content;
+    private byte[] content;
 
     @NotNull
     @Setter

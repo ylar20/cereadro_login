@@ -120,7 +120,7 @@ app.directive('fileModel', [ '$parse', function($parse) {
 
 app.service('ArchiveService', [ '$http', '$rootScope', function($http, $rootScope) {
     this.search = function(name, date) {
-        $http.get("http://localhost:8080/archive/documents", {
+        $http.get("/archive/files", {
             params : {
                 person : name,
                 date : date
@@ -164,7 +164,7 @@ app.controller('UploadCtrl', [ '$scope', 'fileUpload',
 
 app.controller('ArchiveCtrl', function($scope, $http) {
     $scope.search = function(name, date) {
-        $http.get("http://localhost:8080/archive/documents", {
+        $http.get("/archive/files", {
             params : {
                 person : name,
                 date : date
@@ -176,7 +176,7 @@ app.controller('ArchiveCtrl', function($scope, $http) {
 });
 
 app.run(function($rootScope, $http) {
-    $http.get("http://localhost:8080/archive/documents").success(
+    $http.get("/archive/files").success(
         function(response) {
             $rootScope.metadataList = response;
         });
