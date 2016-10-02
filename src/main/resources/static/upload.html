@@ -1,5 +1,6 @@
-<div class="alert alert-danger" ng-show="error">
+<div ng-controller="navigation" class="alert alert-danger" ng-show="error">
     There was a problem uploading your file. Please try again.
+    {{errorMsg}}
 </div>
 
 <div id="main" ng-controller="ArchiveCtrl" class="form-group">
@@ -17,15 +18,19 @@
     <table id="table-6">
         <thead>
         <tr>
-            <th>File</th>
-            <th>Person</th>
+            <th>Id</th>
+            <th>File name</th>
             <th>Date</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="metadata in metadataList">
-            <td><a href="/archive/document/{{metadata.id}}">{{metadata.fileName}}</a></td>
-            <td><a href="/archive/document/{{metadata.id}}">{{metadata.createdDtime | date:'yyyy-MM-dd'}}</a></td>
+            <td>[{{$index + 1}}]</td>
+            <td><a href="/archive/file/{{metadata.id}}">{{metadata.fileName}}</a></td>
+            <td>{{metadata.createdDtime | date:'yyyy-MM-dd'}}</td>
+            <li ng-if="metadataList.length === 0">
+                <strong>No results found...</strong>
+            </li>
         </tr>
         </tbody>
     </table>

@@ -1,6 +1,6 @@
 package com.cereadro.archive.client;
 
-import com.cereadro.archive.service.Document;
+import com.cereadro.archive.service.DocumentFile;
 import com.cereadro.archive.service.DocumentMetadata;
 import com.cereadro.archive.service.IArchiveService;
 import org.apache.log4j.Logger;
@@ -35,7 +35,7 @@ public class ArchiveServiceClient implements IArchiveService {
     RestTemplate restTemplate;
     
     @Override
-    public DocumentMetadata save(Document document) {
+    public DocumentMetadata save(DocumentFile document) {
         try {          
             return doSave(document);
         } catch (RuntimeException e) {
@@ -48,7 +48,7 @@ public class ArchiveServiceClient implements IArchiveService {
 
     }
 
-    private DocumentMetadata doSave(Document document) throws IOException, FileNotFoundException {
+    private DocumentMetadata doSave(DocumentFile document) throws IOException, FileNotFoundException {
         String tempFilePath = writeDocumentToTempFile(document);
         MultiValueMap<String, Object> parts = createMultipartFileParam(tempFilePath);
         String dateString = DocumentMetadata.DATE_FORMAT.format(document.getDocumentDate());
@@ -81,7 +81,7 @@ public class ArchiveServiceClient implements IArchiveService {
         return parts;
     }
 
-    private String writeDocumentToTempFile(Document document) throws IOException, FileNotFoundException {
+    private String writeDocumentToTempFile(DocumentFile document) throws IOException, FileNotFoundException {
         Path path;       
         path = Files.createTempDirectory(document.getUuid());  
         String tempDirPath = path.toString();

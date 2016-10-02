@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -24,6 +24,7 @@ public class DocumentMetadata implements Serializable {
     
     public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
 
     @Getter
     @Setter
@@ -35,7 +36,7 @@ public class DocumentMetadata implements Serializable {
 
     @Getter
     @Setter
-    protected Date documentDate;
+    protected LocalDate documentDate;
 
     @Getter
     @Setter
@@ -45,11 +46,11 @@ public class DocumentMetadata implements Serializable {
         super();
     }
 
-    public DocumentMetadata(String fileName, Date documentDate, String personName) {
+    public DocumentMetadata(String fileName, LocalDate documentDate, String personName) {
         this(UUID.randomUUID().toString(), fileName, documentDate,personName);
     }
     
-    public DocumentMetadata(String uuid, String fileName, Date documentDate, String personName) {
+    public DocumentMetadata(String uuid, String fileName, LocalDate documentDate, String personName) {
         super();
         this.uuid = uuid;
         this.fileName = fileName;
@@ -65,8 +66,8 @@ public class DocumentMetadata implements Serializable {
         String dateString = properties.getProperty(PROP_DOCUMENT_DATE);
         if(dateString!=null) {
             try {
-                this.documentDate = DATE_FORMAT.parse(dateString);
-            } catch (ParseException e) {
+                this.documentDate = LocalDate.parse(dateString, formatter);
+            } catch (Exception e) {
                 LOG.error("Error while parsing date string: " + dateString + ", format is: yyyy-MM-dd" , e);
             }
         }    

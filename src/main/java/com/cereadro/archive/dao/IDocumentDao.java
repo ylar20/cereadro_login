@@ -1,13 +1,13 @@
 package com.cereadro.archive.dao;
 
-import com.cereadro.archive.service.Document;
+import com.cereadro.archive.service.DocumentFile;
 import com.cereadro.archive.service.DocumentMetadata;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * Data access object to insert, find and load {@link Document}s
+ * Data access object to insert, find and load {@link DocumentFile}s
  * 
  * @author Daniel Murygin <daniel.murygin[at]gmail[dot]com>
  */
@@ -18,7 +18,7 @@ public interface IDocumentDao {
      * 
      * @param document A Document
      */
-    void insert(Document document);
+    void insert(DocumentFile document);
     
     /**
      * Finds documents in the data store matching the given parameter.
@@ -40,6 +40,6 @@ public interface IDocumentDao {
      * @param uuid The id of the document
      * @return A document incl. file and meta data
      */
-    Document load(String uuid);
+    DocumentFile load(String uuid);
     
 }

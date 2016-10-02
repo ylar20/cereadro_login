@@ -1,6 +1,6 @@
 package com.cereadro.archive.dao;
 
-import com.cereadro.archive.service.Document;
+import com.cereadro.archive.service.DocumentFile;
 import com.cereadro.archive.service.DocumentMetadata;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class FileSystemDocumentDao implements IDocumentDao {
     }
 
     @Override
-    public void insert(Document document) {
+    public void insert(DocumentFile document) {
         try {
             createDirectory(document);
             saveFileData(document);
@@ -50,7 +50,7 @@ public class FileSystemDocumentDao implements IDocumentDao {
     }
 
     @Override
-    public Document load(String uuid) {
+    public DocumentFile load(String uuid) {
         try {
             return loadFromFileSystem(uuid);
         } catch (IOException e) {
@@ -100,13 +100,13 @@ public class FileSystemDocumentDao implements IDocumentDao {
         return document;
     }
     
-    private Document loadFromFileSystem(String uuid) throws IOException {
+    private DocumentFile loadFromFileSystem(String uuid) throws IOException {
        DocumentMetadata metadata = loadMetadataFromFileSystem(uuid);
        if(metadata==null) {
            return null;
        }
        Path path = Paths.get(getFilePath(metadata));
-       Document document = new Document(metadata);
+       DocumentFile document = new DocumentFile(metadata);
        document.setFileData(Files.readAllBytes(path));
        return document;
     }
@@ -118,14 +118,14 @@ public class FileSystemDocumentDao implements IDocumentDao {
         return sb.toString();
     }
     
-    private void saveFileData(Document document) throws IOException {
+    private void saveFileData(DocumentFile document) throws IOException {
         String path = getDirectoryPath(document);
         BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(new File(path), document.getFileName())));
         stream.write(document.getFileData());
         stream.close();
     }
     
-    public void saveMetaData(Document document) throws IOException {
+    public void saveMetaData(DocumentFile document) throws IOException {
             String path = getDirectoryPath(document);
             Properties props = document.createProperties();
             File f = new File(new File(path), META_DATA_FILE_NAME);
@@ -162,13 +162,13 @@ public class FileSystemDocumentDao implements IDocumentDao {
         return prop;
     }
     
-    private String createDirectory(Document document) {
+    private String createDirectory(DocumentFile document) {
         String path = getDirectoryPath(document);
         createDirectory(path);
         return path;
     }
 
-    private String getDirectoryPath(Document document) {
+    private String getDirectoryPath(DocumentFile document) {
        return getDirectoryPath(document.getUuid());
     }
     

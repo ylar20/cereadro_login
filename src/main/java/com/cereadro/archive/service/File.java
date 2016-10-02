@@ -34,7 +34,7 @@ public class File {
 
     @NotNull
     @Lob
-    @Column(length=100000)
+    @Column(length=1000000)
     @Setter
     @Getter
     private byte[] content;

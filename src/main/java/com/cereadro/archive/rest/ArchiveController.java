@@ -1,7 +1,7 @@
 package com.cereadro.archive.rest;
 
 import com.cereadro.archive.service.ArchiveService;
-import com.cereadro.archive.service.Document;
+import com.cereadro.archive.service.DocumentFile;
 import com.cereadro.archive.service.DocumentMetadata;
 import com.cereadro.archive.service.FileMetadata;
 import com.cereadro.user.User;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class ArchiveController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody DocumentMetadata handleFileUpload(
-            @RequestParam(value="file", required=true) MultipartFile file ,
-            @RequestParam(value="person", required=true) String person,
-            @RequestParam(value="date", required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+            @RequestParam(value="file", required=true) MultipartFile file) {
         
         try {
-            Document document = new Document(file.getBytes(), file.getOriginalFilename(), date, person );
+            if (!"application/pdf".equals(file.getContentType())) {
+                throw new Exception("Wrong file type. Only PDFs currently allowed.");
+            }
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            DocumentFile document = new DocumentFile(file.getBytes(), file.getOriginalFilename(), LocalDate.now(), user.getFirstName());
             archiveService.saveFile(file);
             return document.getMetadata();
         } catch (RuntimeException e) {

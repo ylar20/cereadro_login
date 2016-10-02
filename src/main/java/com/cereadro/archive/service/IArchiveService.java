@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IArchiveService {
 
-    DocumentMetadata save(Document document);
+    DocumentMetadata save(DocumentFile document);
 
     List<DocumentMetadata> findDocuments(String personName, Date date);
 

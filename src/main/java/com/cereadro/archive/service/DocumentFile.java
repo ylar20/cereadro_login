@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Properties;
 
-public class Document extends DocumentMetadata implements Serializable {
+public class DocumentFile extends DocumentMetadata implements Serializable {
 
     private static final long serialVersionUID = 2004955454853853315L;
 
@@ -15,16 +15,16 @@ public class Document extends DocumentMetadata implements Serializable {
     @Setter
     private byte[] fileData;
     
-    public Document( byte[] fileData, String fileName, Date documentDate, String personName) {
+    public DocumentFile(byte[] fileData, String fileName, LocalDate documentDate, String personName) {
         super(fileName, documentDate, personName);
         this.fileData = fileData;
     }
 
-    public Document(Properties properties) {
+    public DocumentFile(Properties properties) {
         super(properties);
     }
     
-    public Document(DocumentMetadata metadata) {
+    public DocumentFile(DocumentMetadata metadata) {
         super(metadata.getUuid(), metadata.getFileName(), metadata.getDocumentDate(), metadata.getPersonName());
     }
 

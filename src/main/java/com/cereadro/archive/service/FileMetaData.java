@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * Created by ylaraasmae on 18/09/16.
@@ -26,7 +25,6 @@ public class FileMetadata implements Serializable {
     @NotNull
     @Setter
     @Getter
-    private LocalDateTime createdDtime;
-
+    private String createdDtime;
 
 }

@@ -48,21 +48,18 @@ app = angular.module('cereadroApp', ['ngRoute'])
         };
     });
 
-app.controller('navigation', function ($scope, $http, TokenStorage) {
-	$scope.authenticated = false;
+app.controller('navigation', function ($scope, $rootScope, $http, TokenStorage) {
+	//$rootScope.authenticated = false;
 	$scope.token;
-    $scope.registered = false;
+    //$scope.registered = false;
 	
 	$scope.init = function () {
 		$http.get('/api/users/current').success(function (user) {
 			if(user.username !== 'anonymousUser'){
-				$scope.authenticated = true;
+				$rootScope.authenticated = true;
+                $rootScope.username = user.username;
 				$scope.username = user.username;
 				$scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
-                /*var rootEle = document.querySelector("html");
-                var ele = angular.element(rootEle);
-                var scope = ele.scope();
-                debugger;*/
 			}
 		});
 	};
@@ -71,34 +68,35 @@ app.controller('navigation', function ($scope, $http, TokenStorage) {
 		$http
             .post('/api/login', { username: $scope.username, password: $scope.password })
             .success(function (result, status, headers) {
-			    $scope.authenticated = true;
+			    $rootScope.authenticated = true;
+                $rootScope.username = $scope.username;
 			    TokenStorage.store(headers('X-AUTH-TOKEN'));
 			    $scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
 		    })
             .error(function() {
-                $scope.authenticated = false;
-                $scope.error = true;
+                $rootScope.authenticated = false;
+                $rootScope.error = true;
             });
 	};
 
     $scope.register = function () {
         $http
             .post('/api/users/register', {username: $scope.username, password:$scope.password,
-                email:$scope.email, firstname:$scope.firstname, lastname:$scope.lastname})
+                email:$scope.email, firstName:$scope.firstName, lastName:$scope.lastName})
         .success(function () {
-            $scope.registered = true;
+            $rootScope.registered = true;
         })
         .error(function(result, status) {
-            $scope.registered = false;
-            $scope.error = true;
-            $scope.errorMsg = { message: result, status: status};
-            console.log($scope.errorMsg);
+            $rootScope.registered = false;
+            $rootScope.error = true;
+            $rootScope.errorMsg = { message: result, status: status};
+            console.log($rootScope.errorMsg);
         });
     };
 
 	$scope.logout = function () {
 		TokenStorage.clear();	
-		$scope.authenticated = false;
+		$rootScope.authenticated = false;
 	};
 });
 
@@ -127,17 +125,18 @@ app.service('ArchiveService', [ '$http', '$rootScope', function($http, $rootScop
             }
         }).success(function(response) {
             $rootScope.metadataList = response;
-        }).error(function() {
+        }).error(function(response, status) {
+            $rootScope.error = true;
+            $rootScope.errorMsg = { message: response, status: status};
+            console.log($rootScope.errorMsg.message);
         });
     }
 }]);
 
-app.service('fileUpload', ['$http','ArchiveService', function($http, ArchiveService) {
-    this.uploadFileToUrl = function(uploadUrl, file, name, date) {
+app.service('fileUpload', ['$http','ArchiveService', '$rootScope', function($http, $rootScope, ArchiveService) {
+    this.uploadFileToUrl = function(uploadUrl, file) {
         var fd = new FormData();
         fd.append('file', file);
-        fd.append('person', name);
-        fd.append('date', date);
         $http.post(uploadUrl, fd, {
             transformRequest : angular.identity,
             headers : {
@@ -145,7 +144,10 @@ app.service('fileUpload', ['$http','ArchiveService', function($http, ArchiveServ
             }
         }).success(function() {
             ArchiveService.search(null, null);
-        }).error(function() {
+        }).error(function(response, status) {
+            $rootScope.error = true;
+            $rootScope.errorMsg = { message: response, status: status};
+            console.log($rootScope.errorMsg.message);
         });
     }
 } ]);
@@ -154,11 +156,9 @@ app.controller('UploadCtrl', [ '$scope', 'fileUpload',
     function($scope, fileUpload) {
         $scope.uploadFile = function() {
             var file = $scope.myFile;
-            var name = $scope.name;
-            var date = $scope.date;
             console.log('file is ' + JSON.stringify(file));
             var uploadUrl = "/archive/upload";
-            fileUpload.uploadFileToUrl(uploadUrl, file, name, date);
+            fileUpload.uploadFileToUrl(uploadUrl, file);
         };
     } ]);
 
