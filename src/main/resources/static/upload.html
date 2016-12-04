@@ -4,11 +4,10 @@
 </div>
 
 <div id="main" ng-controller="ArchiveCtrl" class="form-group">
-    <h2>Documents</h2>
     <table class="table">
         <tr>
-            <td>Name</td>
-            <td>Date</td>
+            <td>Search by name</td>
+            <td>Search by date</td>
         </tr>
         <tr>
             <td><input type="text" class="form-control" ng-model="name" ng-change="search(name,date);" /></td>
@@ -16,6 +15,7 @@
         </tr>
     </table>
     <table id="table-6">
+        <h2>Documents</h2>
         <thead>
         <tr>
             <th>Id</th>

@@ -3,15 +3,23 @@ package com.cereadro.archive.service;
 import com.cereadro.archive.dao.FileDao;
 import com.cereadro.archive.dao.IDocumentDao;
 import com.cereadro.user.User;
-import com.snowtide.PDF;
-import com.snowtide.pdf.Document;
-import com.snowtide.pdf.VisualOutputTarget;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Document;
 import pdfts.examples.GoogleHTMLOutputHandler;
+import org.fit.pdfdom.PDFDomTree;
+import org.fit.pdfdom.PDFToHTML;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -97,21 +105,50 @@ public class ArchiveService implements IArchiveService, Serializable {
 
     public String parsePdfFile(File file) {
         String content = "";
+        PDDocument pdDocument = null;
         try {
-            java.io.File tempFile = java.io.File.createTempFile(file.getFileName(), null, null);
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            fos.write(file.getContent());
-            Document document = PDF.open(tempFile);
-            StringWriter buffer = new StringWriter();
-            GoogleHTMLOutputHandler googleHTMLOutputHandler = new GoogleHTMLOutputHandler();
-            document.pipe(new VisualOutputTarget(buffer));
-            content = buffer.toString();
-            org.w3c.dom.Document doc = googleHTMLOutputHandler.getHTMLDocument();
-            document.close();
+            //java.io.File tempFile = java.io.File.createTempFile(file.getFileName(), null, null);
+            java.io.File tempFile = new java.io.File(file.getFileName());
+            FileUtils.writeByteArrayToFile(tempFile, file.getContent());
+            pdDocument.load(tempFile);
+            PDFDomTree parser = new PDFDomTree();
+
+            Document pdfDoc =  parser.createDOM(pdDocument);
+
+            //StringWriter buffer = new StringWriter();
+            //GoogleHTMLOutputHandler googleHTMLOutputHandler = new GoogleHTMLOutputHandler();
+            //document.pipe(new VisualOutputTarget(buffer));
+            //content = buffer.toString();
+            //org.w3c.dom.Document doc = googleHTMLOutputHandler.getHTMLDocument();
+            //document.close();
+
+            content = getStringFromDocument(pdfDoc);
+            tempFile.delete();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ParserConfigurationException pe) {
+            pe.printStackTrace();
         }
         return content;
+    }
+
+    public String getStringFromDocument(Document doc)
+    {
+        try
+        {
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString();
+        }
+        catch(TransformerException ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
 }
