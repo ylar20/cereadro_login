@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.springframework.cloud:spring-cloud-aws-jdbc:${spring-cloud-aws-version}">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-aws-jdbc/${spring-cloud-aws-version}/spring-cloud-aws-jdbc-${spring-cloud-aws-version}.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-aws-jdbc/${spring-cloud-aws-version}/spring-cloud-aws-jdbc-${spring-cloud-aws-version}-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-aws-jdbc/${spring-cloud-aws-version}/spring-cloud-aws-jdbc-${spring-cloud-aws-version}-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
