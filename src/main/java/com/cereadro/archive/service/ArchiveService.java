@@ -4,6 +4,9 @@ import com.cereadro.archive.dao.FileDao;
 import com.cereadro.archive.dao.IDocumentDao;
 import com.cereadro.user.User;
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.io.RandomAccess;
+import org.apache.pdfbox.io.ScratchFile;
+import org.fit.pdfdom.PDFDomTreeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,10 +23,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.StringWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -71,17 +71,18 @@ public class ArchiveService implements IArchiveService, Serializable {
         file.setFileName(uploadedFile.getOriginalFilename());
         file.setCreatedDtime(LocalDateTime.now());
         fileDao.save(file);
+
+
     }
 
     public File getFileByFilename(String filename) {
         return fileDao.findByFileName(filename);
     }
 
-    public byte[] getFileByteArrayByFileId(Long id) {
+    public String getFileByteArrayByFileId(Long id) {
         File file = fileDao.findFileById(id);
-        parsePdfFile(file);
         if(file != null) {
-            return file.getContent();
+            return parsePdfFile(file);
         }
         return null;
     }
@@ -107,23 +108,10 @@ public class ArchiveService implements IArchiveService, Serializable {
         String content = "";
         PDDocument pdDocument = null;
         try {
-            //java.io.File tempFile = java.io.File.createTempFile(file.getFileName(), null, null);
-            java.io.File tempFile = new java.io.File(file.getFileName());
-            FileUtils.writeByteArrayToFile(tempFile, file.getContent());
-            pdDocument.load(tempFile);
-            PDFDomTree parser = new PDFDomTree();
-
+            pdDocument = PDDocument.load(new ByteArrayInputStream(file.getContent()));
+            PDFDomTree parser = new PDFDomTree(PDFDomTreeConfig.createDefaultConfig());
             Document pdfDoc =  parser.createDOM(pdDocument);
-
-            //StringWriter buffer = new StringWriter();
-            //GoogleHTMLOutputHandler googleHTMLOutputHandler = new GoogleHTMLOutputHandler();
-            //document.pipe(new VisualOutputTarget(buffer));
-            //content = buffer.toString();
-            //org.w3c.dom.Document doc = googleHTMLOutputHandler.getHTMLDocument();
-            //document.close();
-
             content = getStringFromDocument(pdfDoc);
-            tempFile.delete();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParserConfigurationException pe) {

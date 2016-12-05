@@ -6,14 +6,18 @@ import com.cereadro.archive.service.DocumentMetadata;
 import com.cereadro.archive.service.FileMetadata;
 import com.cereadro.user.User;
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.fit.pdfdom.PDFDomTree;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Document;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -71,9 +75,9 @@ public class ArchiveController {
     }
 
     @RequestMapping(value = "/file/{id}", method = RequestMethod.GET)
-    public HttpEntity<byte[]> getFile(@PathVariable Long id) {
+    public HttpEntity<String> getFile(@PathVariable Long id) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_PDF);
+        httpHeaders.setContentType(MediaType.TEXT_HTML);
         return new ResponseEntity<>(archiveService.getFileByteArrayByFileId(id), httpHeaders, HttpStatus.OK);
     }
 
