@@ -175,6 +175,41 @@ app.controller('ArchiveCtrl', function($scope, $http) {
     };
 });
 
+app.controller('modalController', ['$scope', 'ModalService', function($scope, ModalService) {
+
+    $scope.yesNoResult = null;
+    $scope.complexResult = null;
+    $scope.customResult = null;
+
+    $scope.showYesNo = function() {
+
+        ModalService.showModal({
+            templateUrl: "yesno/yesno.html",
+            controller: "YesNoController"
+        }).then(function(modal) {
+            modal.element.modal();
+            modal.close.then(function(result) {
+                $scope.yesNoResult = result ? "You said Yes" : "You said No";
+            });
+        });
+
+    };
+
+    $scope.showCustom = function() {
+
+        ModalService.showModal({
+            templateUrl: "custom/custom.html",
+            controller: "CustomController"
+        }).then(function(modal) {
+            modal.close.then(function(result) {
+                $scope.customResult = "All good!";
+            });
+        });
+
+    };
+
+}]);
+
 app.run(function($rootScope, $http) {
     $http.get("/archive/files").success(
         function(response) {
