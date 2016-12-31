@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
@@ -27,14 +28,22 @@ public class UserDetailsService implements org.springframework.security.core.use
 	}
 
     public void addUser(User user) {
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        newUser.setEmail(user.getEmail());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.grantRole(UserRole.USER);
-        newUser.setCreatedDtime(LocalDateTime.now());
-        userDao.save(newUser);
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		user.grantRole(UserRole.USER);
+		user.setCreatedDtime(LocalDateTime.now());
+        userDao.save(user);
     }
+
+    public User createAdminUser() {
+		User adminUser = new User();
+		adminUser.setFirstName("BrainAdmin");
+		adminUser.setLastName("BrainAdmin");
+		adminUser.setUsername("admin");
+		adminUser.setPassword(new BCryptPasswordEncoder().encode("brainroot"));
+		adminUser.setEmail("admin@braintext.net");
+		adminUser.setAccountEnabled(true);
+		adminUser.setCreatedDtime(LocalDateTime.now());
+		adminUser.grantRole(UserRole.ADMIN);
+		return adminUser;
+	}
 }

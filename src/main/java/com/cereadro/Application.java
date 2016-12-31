@@ -32,6 +32,7 @@ public class Application {
 			public void afterPropertiesSet() {
                 User adminUser = userDao.findByUsername("admin");
                 if(adminUser == null)  {
+                	adminUser = userDetailsService.createAdminUser();
                     userDetailsService.addUser(adminUser);
                 }
 			}

@@ -59,13 +59,13 @@ public class User implements UserDetails {
     @Getter
     @Setter
     @NotNull
-    @Size(min = 5, max = 50)
+    @Size(min = 2, max = 50)
     private String lastName;
 
     @Getter
     @Setter
     @NotNull
-    @Size(min = 5, max = 50)
+    @Size(min = 2, max = 50)
     private String firstName;
 
     @NotNull
