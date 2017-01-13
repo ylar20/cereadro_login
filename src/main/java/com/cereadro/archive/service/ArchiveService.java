@@ -71,8 +71,6 @@ public class ArchiveService implements IArchiveService, Serializable {
         file.setFileName(uploadedFile.getOriginalFilename());
         file.setCreatedDtime(LocalDateTime.now());
         fileDao.save(file);
-
-
     }
 
     public File getFileByFilename(String filename) {
